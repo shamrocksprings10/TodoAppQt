@@ -1,6 +1,7 @@
 import sqlite3
 from collections import namedtuple
-from typing import Iterable, Generator
+from typing import Iterable
+from pathlib import Path
 
 # Create
 CREATE_TABLE = "CREATE TABLE IF NOT EXISTS todo (content TEXT CHECK( LENGTH(content) >= 5 ), completed INTEGER CHECK( completed IN (0,1) ));"
@@ -20,7 +21,8 @@ TodoIn = namedtuple("TodoIn", ("content", "completed"))
 
 class TodoDB:
     def __init__(self):
-        self.connection = sqlite3.connect("todo.db")
+        Path("./todo.db").touch()
+        self.connection = sqlite3.connect("./todo.db")
 
     def init_table(self):
         cursor = self.connection.cursor()
@@ -68,5 +70,3 @@ class TodoDB:
 if __name__ == "__main__":
     db = TodoDB()
     db.init_table()
-    db.insert_todo(TodoIn(content="Clean horse", completed=6))
-    print(db.read_all_todos())
