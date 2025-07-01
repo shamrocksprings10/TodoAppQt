@@ -66,7 +66,3 @@ class TodoDB:
 
     def __del__(self):
         self.connection.close()
-
-if __name__ == "__main__":
-    db = TodoDB()
-    db.init_table()
