@@ -1,4 +1,4 @@
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize, Slot
 from PySide6.QtGui import QAction, QIcon, QFont
 from PySide6.QtWidgets import QApplication, QMainWindow, QListView, QWidget, QGridLayout, QToolBar, QLineEdit, QLabel, \
     QHBoxLayout, QSizePolicy, QPushButton, QMenu
@@ -12,7 +12,7 @@ class MainWindow(QMainWindow):
         db.init_table()
 
         self.setWindowTitle(title)
-        self.setWindowIcon(QIcon("accessories-text-editor.png"))
+        self.setWindowIcon(QIcon("icons/accessories-text-editor.png"))
         self.setFixedSize(QSize(*window_size))
 
         self.todo_widget = TodoWidget(db)
@@ -25,19 +25,21 @@ class TodoWidget(QWidget):
         self.setLayout(self.grid_layout)
 
         font = QFont()
-        font.setPointSize(18)
+        font.setPointSize(15)
 
         search_widget = QWidget()
-        hbox = QHBoxLayout()
-        search_widget.setLayout(hbox)
+        search_grid = QGridLayout()
+        search_widget.setLayout(search_grid)
         self.searchbar = QLineEdit()
         self.searchbar.setPlaceholderText("Search")
         self.searchbar.setFont(font)
-        hbox.addWidget(self.searchbar)
-        self.search_button = QPushButton(icon=QIcon("edit-find.png"))
-        self.search_button.setIconSize(QSize(32, 32))
-        hbox.addWidget(self.search_button)
+        search_grid.addWidget(self.searchbar, 0, 0)
+        self.search_button = QPushButton(icon=QIcon("icons/edit-find.png"))
+        self.search_button.setIconSize(QSize(28, 28))
+        search_grid.addWidget(self.search_button, 0, 1)
         self.grid_layout.addWidget(search_widget)
+        self.searchbar.returnPressed.connect(self.search_button.click)
+        self.search_button.clicked.connect(self.search)
 
         self.todo_model = TodoModel(db, self)
 
@@ -46,19 +48,28 @@ class TodoWidget(QWidget):
         self.list_view.setFont(font)
         self.grid_layout.addWidget(self.list_view)
 
-    def create_actions(self, menu: QMenu):
-        create_todo = QAction("New", self, icon=QIcon("document-new.png"))
-        create_todo.setShortcut("Ctrl+N")
-        menu.addAction(create_todo)
+    @Slot()
+    def search(self): # TODO: search functionality
+        print("search")
 
-        delete_todo = QAction("Delete", self, icon=QIcon("edit-delete.png"))
+    def create_context_menu(self):
+        context_menu = QMenu(self)
+        font = QFont()
+        font.setPointSize(12)
+        context_menu.setFont(font)
+
+        create_todo = QAction("New", self, icon=QIcon("icons/document-new.png"))
+        create_todo.setShortcut("Ctrl+N")
+        context_menu.addAction(create_todo)
+
+        delete_todo = QAction("Delete", self, icon=QIcon("icons/edit-delete.png"))
         delete_todo.setShortcut("Ctrl+D")
-        menu.addAction(delete_todo)
+        context_menu.addAction(delete_todo)
+        return context_menu
 
     def contextMenuEvent(self, event, /):
         if self.list_view.underMouse():
-            context_menu = QMenu(self)
-            self.create_actions(context_menu)
+            context_menu = self.create_context_menu()
             context_menu.popup(self.mapToGlobal(event.pos()))
 
 
