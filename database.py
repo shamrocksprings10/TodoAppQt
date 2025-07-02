@@ -22,7 +22,7 @@ Todo = namedtuple("Todo", ("id", "content", "completed"))
 TodoIn = namedtuple("TodoIn", ("content", "completed"))
 TodoUpdate = namedtuple("TodoUpdate", ("content", "completed"), defaults=(None, None))
 
-def execute(connection: sqlite3.Connection, query: str, args=None, commit=False):
+def execute(connection: sqlite3.Connection, query: str, args=None, *, commit=False):
     cursor = connection.cursor()
     if args:
         result = cursor.execute(query, args)
