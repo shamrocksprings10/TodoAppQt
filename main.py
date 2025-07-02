@@ -1,10 +1,10 @@
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtGui import QAction, QIcon, QFont
-from PySide6.QtWidgets import QApplication, QMainWindow, QListView, QWidget, QGridLayout, QToolBar, QLineEdit, QLabel, \
-    QHBoxLayout, QSizePolicy, QPushButton, QMenu
+from PySide6.QtWidgets import QApplication, QMainWindow, QListView, QWidget, QGridLayout, QLineEdit, QPushButton, QMenu
 
 from database import TodoDB
 from todo_model import TodoModel
+
 
 class MainWindow(QMainWindow):
     def __init__(self, title: str, window_size: tuple[int, int], db: TodoDB):

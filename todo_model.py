@@ -1,5 +1,3 @@
-import sqlite3
-
 from PySide6.QtCore import QAbstractListModel, QModelIndex, Qt
 from PySide6.QtWidgets import QMessageBox, QWidget
 
