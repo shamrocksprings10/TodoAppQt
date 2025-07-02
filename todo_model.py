@@ -25,7 +25,7 @@ class TodoModel(QAbstractListModel):
         # elif role == Qt.ItemDataRole.ToolTipRole:
         #     return self.todos[index.row()].content
         elif role == Qt.ItemDataRole.CheckStateRole:
-            return self.todos[index.row()].completed
+            return int(self.todos[index.row()].completed) * 2
         return None
 
     def setData(self, index: QModelIndex, value, role=Qt.ItemDataRole.EditRole):
@@ -36,8 +36,13 @@ class TodoModel(QAbstractListModel):
             else:
                 QMessageBox.warning(self._parent, "Content too short", "Your input was too short.")
             self.todos = self.refresh_list()
-            self.dataChanged.emit(index, index)
+            return True
+        elif role == Qt.ItemDataRole.CheckStateRole:
+            checked = int(value == 2)
+            id_ = self.todos[index.row()].id
+            self.db.update_todo(id_, TodoUpdate(completed=checked))
+            self.todos = self.refresh_list()
             return True
 
     def flags(self, index: QModelIndex):
-        return Qt.ItemIsEditable | super().flags(index)
+        return Qt.ItemIsEditable | Qt.ItemIsUserCheckable | super().flags(index)
