@@ -22,6 +22,7 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication([])
     db = TodoDB()
+    db.init_table()
     window = MainWindow("Todo App", (800, 600), db)
     window.show()
     print(f"Exited with status code {app.exec()}")
