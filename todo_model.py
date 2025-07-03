@@ -3,13 +3,14 @@ from PySide6.QtCore import QAbstractListModel, QModelIndex, Qt
 import re, string
 from textwrap import shorten as truncate
 
-from main import TodoWidget
+from PySide6.QtWidgets import QWidget
+
 from database import TodoDB, TodoUpdate
 
 TODO_CHAR_WIDTH = 60
 
 class TodoModel(QAbstractListModel):
-    def __init__(self, db: TodoDB, parent: TodoWidget):
+    def __init__(self, db: TodoDB, parent: QWidget):
         super().__init__()
         self.db = db
         self.todos = self.refresh_list()

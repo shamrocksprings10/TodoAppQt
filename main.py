@@ -1,7 +1,7 @@
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtGui import QAction, QIcon, QFont
 from PySide6.QtWidgets import QApplication, QMainWindow, QListView, QWidget, QGridLayout, QLineEdit, QPushButton, QMenu, \
-    QMessageBox
+    QMessageBox, QDialog, QVBoxLayout
 
 from database import TodoDB
 from todo_model import TodoModel
@@ -18,6 +18,15 @@ class MainWindow(QMainWindow):
 
         self.todo_widget = TodoWidget(db)
         self.setCentralWidget(self.todo_widget)
+
+class InsertTodoDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Create New Todo")
+
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+
 
 class TodoWidget(QWidget):
     def __init__(self, db: TodoDB):
@@ -62,6 +71,11 @@ class TodoWidget(QWidget):
         else:
             pass # TODO: issue warning
 
+    @Slot()
+    def create_todo(self):
+        dialog = InsertTodoDialog()
+        dialog.exec()
+
     def create_context_menu(self):
         context_menu = QMenu(self)
         font = QFont()
@@ -69,6 +83,7 @@ class TodoWidget(QWidget):
         context_menu.setFont(font)
 
         create_todo = QAction("New", self, icon=QIcon("icons/document-new.png"))
+        create_todo.triggered.connect(self.create_todo)
         create_todo.setShortcut("Ctrl+N")
         context_menu.addAction(create_todo)
 
