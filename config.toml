@@ -1,11 +1,12 @@
 [gui]
-window_title = ""
+window_title = "Todo App"
 
 [shortcuts]
 new_todo = "Ctrl+N"
 delete_todo = "Ctrl+D"
 
-[warning.update_warning]
+# Warnings
+[warning.content_too_short]
 title = ""
 text = ""
 
@@ -13,6 +14,7 @@ text = ""
 title = ""
 text = ""
 
+# Dialogs
 [dialog.insert_todo]
 title = ""
 placeholder = ""
