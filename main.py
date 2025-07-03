@@ -2,7 +2,7 @@ from PySide6.QtCore import QSize, Slot
 from PySide6.QtGui import QAction, QIcon, QFont
 from PySide6.QtWidgets import QApplication, QMainWindow, QListView, QWidget, QGridLayout, QLineEdit, QPushButton, QMenu
 
-from database import TodoDB
+from database import TodoDB, TodoIn
 from todo_model import TodoModel
 
 
@@ -49,8 +49,17 @@ class TodoWidget(QWidget):
         self.grid_layout.addWidget(self.list_view)
 
     @Slot()
-    def search(self): # TODO: search functionality
-        print("search")
+    def search(self):
+        # TODO: search functionality
+        pass
+
+    @Slot()
+    def delete_todo(self):
+        if self.list_view.selectionModel().hasSelection():
+            index = self.list_view.selectionModel().currentIndex()
+            self.todo_model.delete_todo(index)
+        else:
+            pass # TODO: issue warning
 
     def create_context_menu(self):
         context_menu = QMenu(self)
@@ -63,6 +72,7 @@ class TodoWidget(QWidget):
         context_menu.addAction(create_todo)
 
         delete_todo = QAction("Delete", self, icon=QIcon("icons/edit-delete.png"))
+        delete_todo.triggered.connect(self.delete_todo)
         delete_todo.setShortcut("Ctrl+D")
         context_menu.addAction(delete_todo)
         return context_menu
