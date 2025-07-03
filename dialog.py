@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLineEdit, QDialogButtonBox, QWidget, QMessageBox
 
 
@@ -7,8 +8,9 @@ class InsertTodoDialog(QDialog):
         super().__init__()
         self.parent = parent
         self._content = None
-
         self.setWindowTitle("Create New Todo")
+        self.setWindowIcon(QIcon("icons/accessories-text-editor.png"))
+
         layout = QVBoxLayout()
         self.setLayout(layout)
         self.content_line_edit = QLineEdit(placeholderText="Content")
