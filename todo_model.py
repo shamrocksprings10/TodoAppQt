@@ -10,7 +10,7 @@ from database import TodoDB, TodoUpdate
 TODO_CHAR_WIDTH = 60
 
 class TodoModel(QAbstractListModel):
-    def __init__(self, db: TodoDB, parent: QWidget):
+    def __init__(self, db: TodoDB, parent: QWidget): # setting parent as QWidget instead of TodoWidget to avoid circular import
         super().__init__()
         self.db = db
         self.todos = self.refresh_list()
