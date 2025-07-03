@@ -1,8 +1,9 @@
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtGui import QAction, QIcon, QFont
-from PySide6.QtWidgets import QApplication, QMainWindow, QListView, QWidget, QGridLayout, QLineEdit, QPushButton, QMenu
+from PySide6.QtWidgets import QApplication, QMainWindow, QListView, QWidget, QGridLayout, QLineEdit, QPushButton, QMenu, \
+    QMessageBox
 
-from database import TodoDB, TodoIn
+from database import TodoDB
 from todo_model import TodoModel
 
 
@@ -81,6 +82,9 @@ class TodoWidget(QWidget):
         if self.list_view.underMouse():
             context_menu = self.create_context_menu()
             context_menu.popup(self.mapToGlobal(event.pos()))
+
+    def issue_warning(self, title: str, text: str):
+        QMessageBox.warning(self, title, text)
 
 
 if __name__ == "__main__":

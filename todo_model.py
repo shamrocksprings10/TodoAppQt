@@ -1,15 +1,15 @@
 from PySide6.QtCore import QAbstractListModel, QModelIndex, Qt
-from PySide6.QtWidgets import QMessageBox, QWidget
-
-from database import TodoDB, TodoUpdate
 
 import re, string
 from textwrap import shorten as truncate
 
+from main import TodoWidget
+from database import TodoDB, TodoUpdate
+
 TODO_CHAR_WIDTH = 60
 
 class TodoModel(QAbstractListModel):
-    def __init__(self, db: TodoDB, parent: QWidget):
+    def __init__(self, db: TodoDB, parent: TodoWidget):
         super().__init__()
         self.db = db
         self.todos = self.refresh_list()
@@ -36,7 +36,7 @@ class TodoModel(QAbstractListModel):
             if len(value) >= 5:
                 self.db.update_todo(id_, TodoUpdate(content=value))
             else:
-                QMessageBox.warning(self._parent, "Content too short", "Your input was too short.")
+                self._parent.issue_warning("Content is too short", "Your content must be at least 5 characters long.")
             self.todos = self.refresh_list()
             return True
         elif role == Qt.ItemDataRole.CheckStateRole:
