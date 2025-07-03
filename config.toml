@@ -1,0 +1,21 @@
+[gui]
+window_title = ""
+
+[shortcuts]
+new_todo = "Ctrl+N"
+delete_todo = "Ctrl+D"
+
+[warning.update_warning]
+title = ""
+text = ""
+
+[warning.no_selection]
+title = ""
+text = ""
+
+[dialog.insert_todo]
+title = ""
+placeholder = ""
+
+[icons]
+window_icon = ""
