@@ -56,7 +56,7 @@ class TodoDB:
     def insert_todos(self, todos: Iterable[TodoIn]): execute(self.connection, INSERT_TODO, [todo._asdict() for todo in todos], commit=True, many=True)
 
     # Read
-    def get_todo(self, id_: int) -> Todo: return Todo(*execute(self.connection, GET_TODO, str(id_)))
+    def get_todo(self, id_: int) -> Todo: return Todo(*execute(self.connection, GET_TODO, (str(id_), )))
     def get_all_todos(self) -> list[Todo]:
         result = execute(self.connection, READ_ALL_TODOS)
         return [Todo(*row) for row in result]
@@ -72,7 +72,7 @@ class TodoDB:
             execute(self.connection, UPDATE_TODO_BY_CONTENT, {"id": id_, "content": update.content}, commit=True)
 
     # Delete
-    def delete_todo(self, id_: int): execute(self.connection, DELETE_TODO, str(id_), commit=True)
+    def delete_todo(self, id_: int): execute(self.connection, DELETE_TODO, (str(id_), ), commit=True)
 
     def __del__(self):
         self.connection.close()
