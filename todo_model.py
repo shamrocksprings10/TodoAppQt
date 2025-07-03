@@ -49,17 +49,18 @@ class TodoModel(QAbstractListModel):
             self.dataChanged.emit(index, index)
             return True
 
-    def removeRow(self, index: QModelIndex):
+    def delete_todo(self, index: QModelIndex):
         id_ = self.todos[index.row()].id
         self.db.delete_todo(id_)
         self.todos = self.refresh_list()
-        return True
+        self.removeRow(index.row())
+        self.dataChanged.emit(index, index)
 
     def create_todo(self, todo: TodoIn):
         self.db.insert_todo(todo)
         self.todos = self.refresh_list()
         index = self.index(len(self.todos) - 1, 0)
-        self.rowsInserted.emit(index, index.row(), index.row())
+        self.dataChanged.emit(index, index)
 
     def flags(self, index: QModelIndex):
         return Qt.ItemIsEditable | Qt.ItemIsUserCheckable | super().flags(index)
