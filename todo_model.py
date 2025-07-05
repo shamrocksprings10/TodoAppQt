@@ -3,22 +3,23 @@ from PySide6.QtCore import QAbstractListModel, QModelIndex, Qt
 import re, string
 from textwrap import shorten as truncate
 
-from PySide6.QtWidgets import QWidget
-
 from config import Config
 from database import TodoDB, TodoUpdate, TodoIn
+from dialog import CanIssueWarning
 
 TODO_CHAR_WIDTH = 60
 
 class TodoModel(QAbstractListModel):
-    def __init__(self, db: TodoDB, parent: QWidget): # setting parent as QWidget instead of TodoWidget to avoid circular import
+    def __init__(self, db: TodoDB, parent: CanIssueWarning):
         super().__init__()
+        self.search_string = ""
         self.db = db
-        self.todos = self.refresh_list()
+        self.refresh_list()
         self._parent = parent
 
     def refresh_list(self):
-        return self.db.get_all_todos()
+        self.todos = self.db.search_todos(search=self.search_string)
+        self.dataChanged.emit(QModelIndex(), QModelIndex(), self.todos)
 
     def rowCount(self, parent=None):
         return len(self.todos)
@@ -42,27 +43,27 @@ class TodoModel(QAbstractListModel):
                     Config["warning"]["content_too_short"]["title"],
                     Config["warning"]["content_too_short"]["text"]
                 )
-            self.todos = self.refresh_list()
+            self.refresh_list()
             self.dataChanged.emit(index, index)
             return True
         elif role == Qt.ItemDataRole.CheckStateRole:
             checked = int(value == 2)
             id_ = self.todos[index.row()].id
             self.db.update_todo(id_, TodoUpdate(completed=checked))
-            self.todos = self.refresh_list()
+            self.refresh_list()
             self.dataChanged.emit(index, index)
             return True
 
     def delete_todo(self, index: QModelIndex):
         id_ = self.todos[index.row()].id
         self.db.delete_todo(id_)
-        self.todos = self.refresh_list()
+        self.refresh_list()
         self.removeRow(index.row())
         self.dataChanged.emit(index, index)
 
     def create_todo(self, todo: TodoIn):
         self.db.insert_todo(todo)
-        self.todos = self.refresh_list()
+        self.refresh_list()
         index = self.index(len(self.todos) - 1, 0)
         self.dataChanged.emit(index, index)
 

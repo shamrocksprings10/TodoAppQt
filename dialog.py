@@ -4,6 +4,10 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QLineEdit, QDialogButtonBox,
 
 from config import Config
 
+class CanIssueWarning(QWidget):
+    def issue_warning(self, title: str, text: str):
+        QMessageBox.warning(self.parent(), title, text)
+
 class InsertTodoDialog(QDialog):
     def __init__(self, parent: QWidget):
         super().__init__()

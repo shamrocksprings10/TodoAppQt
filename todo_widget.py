@@ -4,11 +4,11 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLineEdit, QPus
 
 from config import Config
 from database import TodoDB, TodoIn
-from dialog import InsertTodoDialog
+from dialog import InsertTodoDialog, CanIssueWarning
 from todo_model import TodoModel
 
 
-class TodoWidget(QWidget):
+class TodoWidget(CanIssueWarning):
     def __init__(self, db: TodoDB):
         super().__init__()
         self.create_shortcuts()
@@ -41,8 +41,9 @@ class TodoWidget(QWidget):
 
     @Slot()
     def search(self):
-        # TODO: search functionality
-        pass
+        search_string = self.searchbar.text()
+        self.todo_model.search_string = search_string
+        self.todo_model.refresh_list()
 
     @Slot()
     def delete_todo(self):
@@ -92,6 +93,3 @@ class TodoWidget(QWidget):
         if self.list_view.underMouse():
             context_menu = self.create_context_menu()
             context_menu.popup(self.mapToGlobal(event.pos()))
-
-    def issue_warning(self, title: str, text: str):
-        QMessageBox.warning(self.parent(), title, text)
