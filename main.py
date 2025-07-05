@@ -2,6 +2,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QMainWindow
 
+from config import Config
 from database import TodoDB
 from todo_widget import TodoWidget
 
@@ -23,6 +24,6 @@ if __name__ == "__main__":
     app = QApplication([])
     db = TodoDB()
     db.init_table()
-    window = MainWindow("Todo App", (800, 600), db)
+    window = MainWindow(Config["gui"]["window_title"], (800, 600), db)
     window.show()
     print(f"Exited with status code {app.exec()}")

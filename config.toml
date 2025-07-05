@@ -7,17 +7,17 @@ delete_todo = "Ctrl+D"
 
 # Warnings
 [warning.content_too_short]
-title = ""
-text = ""
+title = "Content is too short"
+text = "Your content must be at least 5 characters long."
 
 [warning.no_selection]
-title = ""
-text = ""
+title = "No selection"
+text = "You have not selected any row."
 
 # Dialogs
 [dialog.insert_todo]
-title = ""
-placeholder = ""
+title = "Create New Todo"
+placeholder = "Content"
 
 [icons]
 window_icon = ""

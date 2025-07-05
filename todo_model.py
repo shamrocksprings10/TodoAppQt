@@ -5,6 +5,7 @@ from textwrap import shorten as truncate
 
 from PySide6.QtWidgets import QWidget
 
+from config import Config
 from database import TodoDB, TodoUpdate, TodoIn
 
 TODO_CHAR_WIDTH = 60
@@ -37,7 +38,10 @@ class TodoModel(QAbstractListModel):
             if len(value) >= 5:
                 self.db.update_todo(id_, TodoUpdate(content=value))
             else:
-                self._parent.issue_warning("Content is too short", "Your content must be at least 5 characters long.")
+                self._parent.issue_warning(
+                    Config["dialog"]["content_too_short"]["title"],
+                    Config["dialog"]["content_too_short"]["text"]
+                )
             self.todos = self.refresh_list()
             self.dataChanged.emit(index, index)
             return True

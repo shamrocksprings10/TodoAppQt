@@ -2,6 +2,7 @@ from PySide6.QtCore import QSize, Slot
 from PySide6.QtGui import QFont, QIcon, QAction, QCursor, QShortcut
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLineEdit, QPushButton, QListView, QMenu, QMessageBox
 
+from config import Config
 from database import TodoDB, TodoIn
 from dialog import InsertTodoDialog
 from todo_model import TodoModel
@@ -49,7 +50,10 @@ class TodoWidget(QWidget):
             index = self.list_view.selectionModel().currentIndex()
             self.todo_model.delete_todo(index)
         else:
-            self.issue_warning("No selection", "You have not selected any row.")
+            self.issue_warning(
+                Config["warning"]["no_selection"]["title"], 
+                Config["warning"]["no_selection"]["text"]
+            )
 
     @Slot()
     def create_todo(self):
@@ -61,10 +65,10 @@ class TodoWidget(QWidget):
             self.todo_model.create_todo(TodoIn(content=dialog.content, completed=0))
 
     def create_shortcuts(self):
-        delete_shortcut = QShortcut("Ctrl+D", self)
+        delete_shortcut = QShortcut(Config["shortcuts"]["delete_todo"], self)
         delete_shortcut.activated.connect(self.delete_todo)
 
-        create_shortcut = QShortcut("Ctrl+N", self)
+        create_shortcut = QShortcut(Config["shortcuts"]["new_todo"], self)
         create_shortcut.activated.connect(self.create_todo)
 
 
@@ -75,12 +79,12 @@ class TodoWidget(QWidget):
         context_menu.setFont(font)
 
         create_todo = QAction("New", self, icon=QIcon("icons/document-new.png"))
-        create_todo.setShortcut("Ctrl+N")
+        create_todo.setShortcut(Config["shortcuts"]["new_todo"])
         create_todo.triggered.connect(self.create_todo)
         context_menu.addAction(create_todo)
 
         delete_todo = QAction("Delete", self, icon=QIcon("icons/edit-delete.png"))
-        delete_todo.setShortcut("Ctrl+D")
+        delete_todo.setShortcut(Config["shortcuts"]["delete_todo"])
         delete_todo.triggered.connect(self.delete_todo)
         context_menu.addAction(delete_todo)
         return context_menu
