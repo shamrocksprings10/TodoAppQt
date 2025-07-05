@@ -39,8 +39,8 @@ class TodoModel(QAbstractListModel):
                 self.db.update_todo(id_, TodoUpdate(content=value))
             else:
                 self._parent.issue_warning(
-                    Config["dialog"]["content_too_short"]["title"],
-                    Config["dialog"]["content_too_short"]["text"]
+                    Config["warning"]["content_too_short"]["title"],
+                    Config["warning"]["content_too_short"]["text"]
                 )
             self.todos = self.refresh_list()
             self.dataChanged.emit(index, index)
