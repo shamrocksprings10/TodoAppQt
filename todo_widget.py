@@ -61,7 +61,6 @@ class TodoWidget(QWidget):
         dialog = InsertTodoDialog(self)
         dialog.setGeometry(pos.x(), pos.y(), 200, 100)
         if dialog.exec():
-            # Todo: Create todo
             self.todo_model.create_todo(TodoIn(content=dialog.content, completed=0))
 
     def create_shortcuts(self):
